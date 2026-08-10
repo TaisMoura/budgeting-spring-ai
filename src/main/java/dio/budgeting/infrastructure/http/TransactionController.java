@@ -1,7 +1,9 @@
 package dio.budgeting.infrastructure.http;
 
+import dio.budgeting.application.GetFinancialSummaryUseCase;
 import dio.budgeting.application.ListTransactionsByCategoryUseCase;
 import dio.budgeting.application.PersistTransactionUseCase;
+import dio.budgeting.application.output.FinancialSummaryOutput;
 import dio.budgeting.domain.Category;
 import dio.budgeting.infrastructure.http.request.TransactionRequest;
 import dio.budgeting.infrastructure.http.response.TransactionResponse;
@@ -24,26 +26,35 @@ import java.util.List;
 public class TransactionController {
     private final PersistTransactionUseCase persistTransactionUseCase;
     private final ListTransactionsByCategoryUseCase listTransactionsByCategoryUseCase;
-
+    private final GetFinancialSummaryUseCase getFinancialSummaryUseCase;
     private final TranscriptionModel transcriptionModel;
     private final ChatClient chatClient;
     private final TextToSpeechModel textToSpeechModel;
+    public TransactionController(
+        PersistTransactionUseCase persistTransactionUseCase,
+        ListTransactionsByCategoryUseCase listTransactionsByCategoryUseCase,
+        GetFinancialSummaryUseCase getFinancialSummaryUseCase,
+        TranscriptionModel transcriptionModel,
+        @Value("classpath:prompts/system-message.st") Resource systemPrompt,
+        ChatClient.Builder chatClientBuilder,
+        TextToSpeechModel textToSpeechModel) throws IOException {
 
-    public TransactionController(PersistTransactionUseCase persistTransactionUseCase,
-                                 ListTransactionsByCategoryUseCase listTransactionsByCategoryUseCase,
-                                 TranscriptionModel transcriptionModel,
-                                 @Value("classpath:prompts/system-message.st") Resource systemPrompt,
-                                 ChatClient.Builder chatClientBuilder,
-                                 TextToSpeechModel textToSpeechModel) throws IOException {
-        this.persistTransactionUseCase = persistTransactionUseCase;
-        this.listTransactionsByCategoryUseCase = listTransactionsByCategoryUseCase;
-        this.transcriptionModel = transcriptionModel;
-        this.chatClient = chatClientBuilder
-                .defaultSystem(systemPrompt.getContentAsString(Charset.defaultCharset()))
-                .defaultTools(persistTransactionUseCase, listTransactionsByCategoryUseCase)
-                .build();
-        this.textToSpeechModel = textToSpeechModel;
-    }
+    this.persistTransactionUseCase = persistTransactionUseCase;
+    this.listTransactionsByCategoryUseCase = listTransactionsByCategoryUseCase;
+    this.getFinancialSummaryUseCase = getFinancialSummaryUseCase;
+    this.transcriptionModel = transcriptionModel;
+
+    this.chatClient = chatClientBuilder
+            .defaultSystem(systemPrompt.getContentAsString(Charset.defaultCharset()))
+            .defaultTools(
+                    persistTransactionUseCase,
+                    listTransactionsByCategoryUseCase,
+                    getFinancialSummaryUseCase
+            )
+            .build();
+
+    this.textToSpeechModel = textToSpeechModel;
+}
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
