@@ -83,3 +83,43 @@ Run the application and tests:
 
 - Educational final project focused on AI plus architectural discipline.
 - External provider integration tests may require active credentials.
+
+## My Implementation — Financial Summary
+
+As an improvement to the original project, I implemented a financial summary feature for the registered transactions.
+
+The feature calculates:
+
+- Total number of transactions
+- Total transaction amount
+- Average transaction amount
+- Highest transaction amount
+- Lowest transaction amount
+
+### Financial Summary Use Case
+
+The business rule was implemented in:
+
+`src/main/java/dio/budgeting/application/GetFinancialSummaryUseCase.java`
+
+The use case retrieves all transactions through the `TransactionRepository` and calculates the financial indicators.
+
+The existing domain and application boundaries are preserved, keeping the business logic outside the HTTP controller.
+
+### REST Endpoint
+
+The feature is exposed through:
+
+`GET /transactions/summary`
+
+Example response:
+
+```json
+{
+  "totalTransactions": 4,
+  "totalAmount": 280.0,
+  "averageAmount": 70.0,
+  "highestAmount": 100.0,
+  "lowestAmount": 30.0
+}
+```
