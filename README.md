@@ -123,3 +123,51 @@ Example response:
   "lowestAmount": 30.0
 }
 ```
+## Portfolio Overview
+
+This project demonstrates the integration of Artificial Intelligence capabilities into a Spring Boot financial application while preserving separation of responsibilities and application boundaries.
+
+### My Contribution
+
+As an improvement to the original project, I implemented a Financial Summary feature for registered transactions.
+
+The feature provides:
+
+- Total number of transactions
+- Total transaction amount
+- Average transaction amount
+- Highest transaction amount
+- Lowest transaction amount
+
+The business rule is implemented in the application layer through the `GetFinancialSummaryUseCase`.
+
+The same business capability can be consumed through the REST API and exposed to Spring AI through Tool Calling.
+
+### Technologies
+
+- Java
+- Spring Boot
+- Spring AI
+- REST API
+- Clean Architecture concepts
+- Domain-Driven Design concepts
+- Repository Pattern
+- JUnit 5
+- Mockito
+- MockMvc
+- Gradle
+- Git and GitHub
+
+### Quality and Validation
+
+The project includes automated tests covering the financial summary use case and REST controller.
+
+The complete test suite was validated with:
+
+```bash
+./gradlew clean test
+```markdown
+Result:
+
+```text
+BUILD SUCCESSFUL
