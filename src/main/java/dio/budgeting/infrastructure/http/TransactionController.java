@@ -67,6 +67,10 @@ public class TransactionController {
     public List<TransactionResponse> readTransactions(@PathVariable Category category) {
         return listTransactionsByCategoryUseCase.execute(category).stream().map(TransactionResponse::from).toList();
     }
+    @GetMapping("/summary")
+public FinancialSummaryOutput getFinancialSummary() {
+    return getFinancialSummaryUseCase.execute();
+}
 
     @PostMapping(value = "/ai", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "audio/mp3")
     ResponseEntity<Resource> transcribe(@RequestParam("file") MultipartFile file) {
