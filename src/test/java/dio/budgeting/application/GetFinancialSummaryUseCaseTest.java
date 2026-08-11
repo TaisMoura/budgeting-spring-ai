@@ -22,46 +22,38 @@ class GetFinancialSummaryUseCaseTest {
 
     @Test
     void shouldCalculateFinancialSummary() {
-        var transaction1 =
-                new Transaction("Compra no mercado", 5000, Category.GROCERIES);
 
-        var transaction2 =
-                new Transaction("Medicamentos", 3000, Category.PHARMA);
-
-        var transaction3 =
-                new Transaction("Compras da semana", 8000, Category.GROCERIES);
-
-        var transaction4 =
-                new Transaction("Abastecimento do carro", 10000, Category.AUTO);
+        var transactions = List.of(
+                new Transaction("Supermercado", 10000, Category.GROCERIES),
+                new Transaction("Farmácia", 5000, Category.PHARMA),
+                new Transaction("Combustível", 3000, Category.AUTO),
+                new Transaction("Mercado", 10000, Category.GROCERIES)
+        );
 
         when(transactionRepository.findAll())
-                .thenReturn(List.of(
-                        transaction1,
-                        transaction2,
-                        transaction3,
-                        transaction4
-                ));
+                .thenReturn(transactions);
 
-        FinancialSummaryOutput output = useCase.execute();
+        FinancialSummaryOutput result = useCase.execute();
 
-        assertEquals(4, output.totalTransactions());
-        assertEquals(260.0, output.totalAmount());
-        assertEquals(65.0, output.averageAmount());
-        assertEquals(100.0, output.highestAmount());
-        assertEquals(30.0, output.lowestAmount());
+        assertEquals(4, result.totalTransactions());
+        assertEquals(280.0, result.totalAmount());
+        assertEquals(70.0, result.averageAmount());
+        assertEquals(100.0, result.highestAmount());
+        assertEquals(30.0, result.lowestAmount());
     }
 
     @Test
-    void shouldReturnZerosWhenThereAreNoTransactions() {
+    void shouldReturnEmptySummaryWhenThereAreNoTransactions() {
+
         when(transactionRepository.findAll())
                 .thenReturn(List.of());
 
-        FinancialSummaryOutput output = useCase.execute();
+        FinancialSummaryOutput result = useCase.execute();
 
-        assertEquals(0, output.totalTransactions());
-        assertEquals(0.0, output.totalAmount());
-        assertEquals(0.0, output.averageAmount());
-        assertEquals(0.0, output.highestAmount());
-        assertEquals(0.0, output.lowestAmount());
+        assertEquals(0, result.totalTransactions());
+        assertEquals(0.0, result.totalAmount());
+        assertEquals(0.0, result.averageAmount());
+        assertEquals(0.0, result.highestAmount());
+        assertEquals(0.0, result.lowestAmount());
     }
 }
