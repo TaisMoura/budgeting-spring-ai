@@ -166,8 +166,10 @@ The complete test suite was validated with:
 
 ```bash
 ./gradlew clean test
-```markdown
+```
 Result:
 
 ```text
 BUILD SUCCESSFUL
+```
+
